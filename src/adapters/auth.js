@@ -1,4 +1,4 @@
-import config from '../config/login';
+import config from './backend';
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 
 var poolData = {
@@ -13,6 +13,17 @@ const getCognitoUser = (email) => {
         Username: email,
         Pool: userPool
     })
+}
+
+export const getCurrentUser = (cb) => {
+    var cognitoUser = userPool.getCurrentUser();
+    return cognitoUser.getSession(function(err, session) {
+        if (err) {
+            alert(err);
+            return;
+        }
+        return cb(session)
+    });
 }
 
 export const login = (email, password, onSuccess, onFailure) => {
